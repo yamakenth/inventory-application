@@ -5,12 +5,23 @@ var async = require('async');
 
 // display list of all categorys 
 exports.category_list = function(req, res, next) {
-  Category.find()
-    .sort({ name: 1 })
-    .exec(function(err, list_category) {
+  async.parallel(
+    {
+      categories: function(callback) {
+        Category.find()
+          .sort({ name: 1 })
+          .exec(callback);
+      },
+      product_count: function(callback) {
+        Product.aggregate([{ $group: { _id: '$category', count: { $sum: 1 } } }])
+          .exec(callback);
+      }
+    },
+    function(err, results) {
       if (err) return next(err);
-      res.render('category_list', { title: 'Category List', category_list: list_category });
-    });
+      res.render('category_list', { title: 'Category List', data: results });
+    }
+  );
 }
 
 // display detail page for a specific category 

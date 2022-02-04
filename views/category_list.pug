@@ -3,8 +3,11 @@ extends layout
 block content
   h1= title
   ul
-    each category in category_list
+    each category in data.categories
       li
-        a(href=category.url) #{category.name}
+        a(href=category.url) #{category.name} 
+        each obj in data.product_count 
+          if String(obj._id) === String(category._id)
+            span (#{obj.count} products)
     else
       li There are no categories.
