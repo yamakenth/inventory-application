@@ -1,8 +1,13 @@
 var Manufacturer = require('../models/manufacturer');
 
 // display list of all manufacturers 
-exports.manufacturer_list = function(req, res) {
-  res.send('NOT IMPLEMENTED: manufacturer_list');
+exports.manufacturer_list = function(req, res, next) {
+  Manufacturer.find()
+  .sort({ name: 1 })
+  .exec(function(err, list_manufacturer) {
+    if (err) return next(err);
+    res.render('manufacturer_list', { title: 'Manufacturer List', manufacturer_list: list_manufacturer });
+  });
 }
 
 // display detail page for a specific manufacturer 
