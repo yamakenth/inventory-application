@@ -6,8 +6,10 @@ block content
     each category in data.categories
       li
         a(href=category.url) #{category.name} 
+        - var i = 0
         each obj in data.product_count 
           if String(obj._id) === String(category._id)
-            span (#{obj.count} products)
+            - i = obj.count
+        span (#{i} products)
     else
       li There are no categories.

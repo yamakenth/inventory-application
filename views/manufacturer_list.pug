@@ -6,8 +6,10 @@ block content
     each manufacturer in data.manufacturer_list
       li
         a(href=manufacturer.url) #{manufacturer.name} 
+        - var i = 0;
         each obj in data.product_count
           if String(obj._id) === String(manufacturer._id)
-            span (#{obj.count} products)
+            - i = obj.count
+        span (#{i} products)
     else
       li There are no manufacturers.
