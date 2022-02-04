@@ -5,6 +5,7 @@ block content
   p #[strong Description:] #{data.category.description}
   div.subsection
     h2 Products: 
+    p There are #[strong #{data.products.length}] products in this record.
     each product in data.products
       hr
       a(href=product.url) #{product.name}
