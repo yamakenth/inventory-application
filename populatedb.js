@@ -192,7 +192,7 @@ function createProducts(cb) {
     },
     function(callback) {
       productCreate(
-        'Apple AirPods (2nd Generation)',
+        'AirPods (2nd Generation)',
         [
           'Quick access to Siri by saying “ Hey Siri ”',
           'More than 24 hours total listening time with the Charging Case',
