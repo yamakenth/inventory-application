@@ -2,10 +2,13 @@ extends layout
 
 block content 
   h1= title
-  p #[strong Description:] #{product.description}
   p #[strong Manufacturer:] 
     a(href=product.manufacturer.url) #{product.manufacturer.name}
   p #[strong Category:] 
     a(href=product.category.url) #{product.category.name}
   p #[strong Price:] #{product.price_formatted}
   p #[strong Stock:] #{product.stock}
+  p #[strong Description:] 
+    ul
+      each desc in product.description
+        li= desc
