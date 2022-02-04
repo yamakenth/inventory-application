@@ -11,8 +11,13 @@ exports.category_list = function(req, res, next) {
 }
 
 // display detail page for a specific category 
-exports.category_detail = function(req, res) {
-  res.send('NOT IMPLEMENTED: category_detail');
+exports.category_detail = function(req, res, next) {
+  Category.findById(req.params.id)
+    .sort({ name: 1 })
+    .exec(function(err, category) {
+      if (err) return next(err);
+      res.render('category_detail', { title: category.name, category: category });
+    });
 }
 
 // display category create form on GET 
