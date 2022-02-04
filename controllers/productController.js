@@ -2,7 +2,8 @@ var Product = require('../models/product');
 
 // display home page 
 exports.index = function(req, res) {
-  res.send('NOT IMPLEMENTED: index');
+  // res.send('NOT IMPLEMENTED: index');
+  res.render('index', { title: 'Home' });
 }
 
 // display list of all products 

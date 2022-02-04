@@ -29,7 +29,7 @@ router.post('/product/:id/update', product_controller.product_update_post);
 router.get('/product/:id', product_controller.product_detail);
 
 // GET request for all products 
-router.get('/product', product_controller.product_list);
+router.get('/products', product_controller.product_list);
 
 /// MANUFACTURER ROUTES /// 
 
@@ -52,7 +52,7 @@ router.post('/manufacturer/:id/update', manufacturer_controller.manufacturer_upd
 router.get('/manufacturer/:id', manufacturer_controller.manufacturer_detail);
 
 // GET request for all manufacturers 
-router.get('/manufacturer', manufacturer_controller.manufacturer_list);
+router.get('/manufacturers', manufacturer_controller.manufacturer_list);
 
 /// CATEGORY ROUTES /// 
 
@@ -75,6 +75,6 @@ router.post('/category/:id/update', category_controller.category_update_post);
 router.get('/category/:id', category_controller.category_detail);
 
 // GET request for all categories 
-router.get('/category', category_controller.category_list);
+router.get('/categories', category_controller.category_list);
 
 module.exports = router;
