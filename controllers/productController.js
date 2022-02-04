@@ -25,8 +25,14 @@ exports.index = function(req, res) {
 }
 
 // display list of all products 
-exports.product_list = function(req, res) {
-  res.send('NOT IMPLEMENTED: product_list');
+exports.product_list = function(req, res, next) {
+  Product.find({}, 'name manufacturer stock')
+  .sort({ name: 1 })
+  .populate('manufacturer')
+    .exec(function(err, list_product) {
+      if (err) return next(err);
+      res.render('product_list', { title: 'Product List', product_list: list_product });
+    });
 }
 
 // display detail page for a specific product 
