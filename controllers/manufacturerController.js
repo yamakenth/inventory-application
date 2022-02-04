@@ -2,6 +2,7 @@ var Manufacturer = require('../models/manufacturer');
 var Product = require('../models/product');
 
 var async = require('async');
+var { body, validationResult } = require("express-validator");
 
 // display list of all manufacturers 
 exports.manufacturer_list = function(req, res, next) {
@@ -49,13 +50,37 @@ exports.manufacturer_detail = function(req, res, next) {
 
 // display manufacturer create form on GET 
 exports.manufacturer_create_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: manufacturer_create_get');
+  res.render('manufacturer_form', { title: 'Add New Manufacturer' });
 }
 
 // handle manufacturer create on POST
-exports.manufacturer_create_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: manufacturer_create_post');
-}
+exports.manufacturer_create_post = [
+  body('name', 'Manufacturer name required').trim().isLength({ min: 1 }).escape(),
+  function(req, res, next) {
+    var errors = validationResult(req);
+    var manufacturer = new Manufacturer({ name: req.body.name });
+    if (!errors.isEmpty()) {
+      res.render('manufacturer_form', { 
+        title: 'Add New Manufacturer',  
+        manufacturer: manufacturer,
+        errors: errors.array()
+      });
+    } else {
+      Manufacturer.findOne({ 'name': req.body.name })
+        .exec(function(err, found_manufacturer) {
+          if (err) return next(err);
+          if (found_manufacturer) {
+            res.redirect(found_manufacturer.url);
+          } else {
+            manufacturer.save(function(err) {
+              if (err) return next(err);
+              res.redirect(manufacturer.url);
+            });
+          }
+        });
+    }
+  }
+];
 
 // display manufacturer delete form on GET 
 exports.manufacturer_delete_get = function(req, res) {
