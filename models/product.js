@@ -16,4 +16,11 @@ ProductSchema
     return '/catalog/product/' + this._id;
   });
 
+ProductSchema
+  .virtual('price_formatted')
+  .get(function() {
+    var formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+    return formatter.format(this.price);
+  });
+
 module.exports = mongoose.model('Product', ProductSchema);
