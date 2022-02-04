@@ -1,4 +1,7 @@
 var Manufacturer = require('../models/manufacturer');
+var Product = require('../models/product');
+
+var async = require('async');
 
 // display list of all manufacturers 
 exports.manufacturer_list = function(req, res, next) {
@@ -11,8 +14,26 @@ exports.manufacturer_list = function(req, res, next) {
 }
 
 // display detail page for a specific manufacturer 
-exports.manufacturer_detail = function(req, res) {
-  res.send('NOT IMPLEMENTED: manufacturer_detail');
+exports.manufacturer_detail = function(req, res, next) {
+  async.parallel(
+    {
+      manufacturer: function(callback) {
+        Manufacturer.findById(req.params.id)
+          .sort({ name: 1 })
+          .exec(callback);
+      },
+      products: function(callback) {
+        Product.find({ 'manufacturer': req.params.id })
+          .populate('category')
+          .sort({ name: 1 })
+          .exec(callback);
+      }
+    },
+    function(err, results) {
+      if (err) return next(err);
+      res.render('manufacturer_detail', { title: results.manufacturer.name, data: results });
+    }
+  );
 }
 
 // display manufacturer create form on GET 
