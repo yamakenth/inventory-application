@@ -2,7 +2,10 @@ extends layout
 
 block content 
   h1= title
-  p #[strong Description:] #{category.description}
+  p #[strong Description:] #{data.category.description}
   div.subsection
     h2 Products: 
-    
+    each product in data.products
+      hr
+      a(href=product.url) #{product.name}
+      |  (#{product.manufacturer.name})

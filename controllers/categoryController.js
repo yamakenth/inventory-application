@@ -1,4 +1,7 @@
 var Category = require('../models/category');
+var Product = require('../models/product');
+
+var async = require('async');
 
 // display list of all categorys 
 exports.category_list = function(req, res, next) {
@@ -12,12 +15,25 @@ exports.category_list = function(req, res, next) {
 
 // display detail page for a specific category 
 exports.category_detail = function(req, res, next) {
-  Category.findById(req.params.id)
-    .sort({ name: 1 })
-    .exec(function(err, category) {
+  async.parallel(
+    {
+      category: function(callback) {
+        Category.findById(req.params.id)
+          .sort({ name: 1 })
+          .exec(callback);
+      },
+      products: function(callback) {
+        Product.find({ 'category': req.params.id })
+          .populate('manufacturer')
+          .sort({ name: 1 })
+          .exec(callback);
+      }
+    },
+    function(err, results) {
       if (err) return next(err);
-      res.render('category_detail', { title: category.name, category: category });
-    });
+      res.render('category_detail', { title: results.category.name, data: results });
+    }
+  );
 }
 
 // display category create form on GET 
