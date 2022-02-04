@@ -1,9 +1,27 @@
 var Product = require('../models/product');
+var Category = require('../models/category');
+var Manufacturer = require('../models/manufacturer');
+
+var async = require('async');
 
 // display home page 
 exports.index = function(req, res) {
-  // res.send('NOT IMPLEMENTED: index');
-  res.render('index', { title: 'Home' });
+  async.parallel(
+    {
+      product_count: function(callback) {
+        Product.countDocuments({}, callback);
+      },
+      category_count: function(callback) {
+        Category.countDocuments({}, callback);
+      },
+      manufacturer_count: function(callback) {
+        Manufacturer.countDocuments({}, callback);
+      }
+    },
+    function(err, results) {
+      res.render('index', { title: 'Home', error: err, data: results });
+    }
+  );
 }
 
 // display list of all products 
