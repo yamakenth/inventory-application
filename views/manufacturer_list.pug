@@ -3,8 +3,11 @@ extends layout
 block content
   h1= title
   ul
-    each manufacturer in manufacturer_list
+    each manufacturer in data.manufacturer_list
       li
-        a(href=manufacturer.url) #{manufacturer.name}
+        a(href=manufacturer.url) #{manufacturer.name} 
+        each obj in data.product_count
+          if String(obj._id) === String(manufacturer._id)
+            span (#{obj.count} products)
     else
       li There are no manufacturers.
