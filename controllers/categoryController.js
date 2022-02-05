@@ -49,7 +49,7 @@ exports.category_detail = function(req, res, next) {
 
 // display category create form on GET 
 exports.category_create_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: category_create_get');
+  res.render('category_form', { title: 'Add New Category' });
 }
 
 // handle category create on POST
