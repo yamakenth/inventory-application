@@ -12,18 +12,48 @@ block content
         value=((product === undefined) ? '' : product.name))
     div.form-group
       label(for='manufacturer') Manufacturer:
-      input#manufacturer.form-control(
-        type='text', 
-        placeholder='Name of manufacturer',
+      select#manufacturer.form-control(
+        type='select',
+        placeholder='Select a manufacturer',
         name='manufacturer',
-        value=((product === undefined) ? '' : product.manufacturer))
+        required='true'
+      )
+        - manufacturers.sort(function(a, b) {
+            var textA = a.name.toUpperCase();
+            var textB = b.name.toUpperCase();
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        - })
+        for manufacturer in manufacturers
+          if product
+            option(
+              value=manufacturer._id
+              selected=(manufacturer._id.toString()===product.manufacturer._id.toString() ? 'selected': false)
+            )
+            | #{manufacturer.name}
+          else 
+            option(value=manufacturer._id) #{manufacturer.name}
     div.form-group
       label(for='category') Category:
-      input#category.form-control(
-        type='text', 
-        placeholder='Name of category',
+      select#category.form-control(
+        type='select',
+        placeholder='Select a category',
         name='category',
-        value=((product === undefined) ? '' : product.category))
+        required='true'
+      )
+        - categories.sort(function(a, b) {
+            var textA = a.name.toUpperCase();
+            var textB = b.name.toUpperCase();
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        - })
+        for category in categories
+          if product
+            option(
+              value=category._id
+              selected=(category._id.toString()===product.category._id.toString() ? 'selected': false)
+            )
+            | #{category.name}
+          else 
+            option(value=category._id) #{category.name}
     div.form-group
       label(for='price') Price:
       input#price.form-control(
