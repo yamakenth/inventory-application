@@ -49,7 +49,7 @@ exports.product_detail = function(req, res, next) {
 
 // display product create form on GET 
 exports.product_create_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: product_create_get');
+  res.render('product_form', { title: 'Add New Product' });
 }
 
 // handle product create on POST

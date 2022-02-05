@@ -1,0 +1,58 @@
+extends layout
+
+block content
+  h1= title
+  form(method='POST' action='')
+    div.form-group
+      label(for='name') Product Name:
+      input#name.form-control(
+        type='text', 
+        placeholder='Name of product',
+        name='name',
+        value=((product === undefined) ? '' : product.name))
+    div.form-group
+      label(for='manufacturer') Manufacturer:
+      input#manufacturer.form-control(
+        type='text', 
+        placeholder='Name of manufacturer',
+        name='manufacturer',
+        value=((product === undefined) ? '' : product.manufacturer))
+    div.form-group
+      label(for='category') Category:
+      input#category.form-control(
+        type='text', 
+        placeholder='Name of category',
+        name='category',
+        value=((product === undefined) ? '' : product.category))
+    div.form-group
+      label(for='price') Price:
+      input#price.form-control(
+        min='0',
+        step='0.01',
+        type='number', 
+        placeholder='9999.99',
+        name='price',
+        value=((product === undefined) ? '' : product.price))
+    div.form-group
+      label(for='stock') Stock:
+      input#stock.form-control(
+        min='0',
+        step='1',
+        type='number',
+        placeholder='9999',
+        name='stock',
+        value=((product === undefined) ? '' : product.stock))
+    div.form-group
+      label(for='description') Description:
+      textarea#description.form-control(
+        cols='30', 
+        rows='6',
+        type='text', 
+        placeholder='Description of product',
+        name='description' 
+        value=((product === undefined) ? '' : product.description))
+    button.btn.btn-primary(type='submit') Submit
+  if errors
+   ul
+    for error in errors
+      li!= error.msg
