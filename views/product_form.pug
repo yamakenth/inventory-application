@@ -28,8 +28,7 @@ block content
             option(
               value=manufacturer._id
               selected=(manufacturer._id.toString()===product.manufacturer._id.toString() ? 'selected': false)
-            )
-            | #{manufacturer.name}
+            ) #{manufacturer.name}
           else 
             option(value=manufacturer._id) #{manufacturer.name}
     div.form-group
@@ -50,8 +49,7 @@ block content
             option(
               value=category._id
               selected=(category._id.toString()===product.category._id.toString() ? 'selected': false)
-            )
-            | #{category.name}
+            ) #{category.name}
           else 
             option(value=category._id) #{category.name}
     div.form-group
@@ -82,7 +80,7 @@ block content
               type='text', 
               placeholder='Description(' + (i+1) + ') of product',
               name='description_' + i,
-              value=((product === undefined) ? '' : product.description))
+              value=((product === undefined) ? '' : product.description[i]))
         - }
     button.btn.btn-primary(type='submit') Submit
   if errors
