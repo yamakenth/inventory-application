@@ -43,14 +43,17 @@ block content
         name='stock',
         value=((product === undefined) ? '' : product.stock))
     div.form-group
-      label(for='description') Description:
-      textarea#description.form-control(
-        cols='30', 
-        rows='6',
-        type='text', 
-        placeholder='Description of product',
-        name='description' 
-        value=((product === undefined) ? '' : product.description))
+      label Description:
+      ul
+        - for (var i = 0; i < 10; i++) {
+          li(class='product-description-input')
+            input.form-control(
+              id='description-' + i,
+              type='text', 
+              placeholder='Description(' + (i+1) + ') of product',
+              name='description_' + i,
+              value=((product === undefined) ? '' : product.description))
+        - }
     button.btn.btn-primary(type='submit') Submit
   if errors
    ul
