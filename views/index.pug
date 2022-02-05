@@ -9,6 +9,9 @@ block content
   else
     p The inventory has the following record counts:
     ul
-      li #[strong Products:] #{data.product_count}
-      li #[strong Categories:] #{data.category_count}
-      li #[strong Manufacturers:] #{data.manufacturer_count}
+      li #[strong Products:] 
+        a(href='/catalog/products') #{data.product_count}
+      li #[strong Categories:] 
+        a(href='/catalog/categories') #{data.category_count}
+      li #[strong Manufacturers:] 
+        a(href='/catalog/manufacturers') #{data.manufacturer_count}
