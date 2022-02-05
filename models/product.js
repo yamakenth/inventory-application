@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+var he = require('he');
+
 var ProductSchema = new Schema({
   name: { type: String, required: true, maxLength: 100 },
   description: [{ type: String, required: true }],
@@ -21,6 +23,16 @@ ProductSchema
   .get(function() {
     var formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
     return formatter.format(this.price);
+  });
+
+ProductSchema
+  .virtual('description_unescaped')
+  .get(function() {
+    var newDescription = [];
+    for (let element of this.description) {
+      newDescription.push(he.decode(element));
+    }
+    return newDescription;
   });
 
 module.exports = mongoose.model('Product', ProductSchema);

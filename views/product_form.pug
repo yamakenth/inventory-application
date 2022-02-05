@@ -80,7 +80,7 @@ block content
               type='text', 
               placeholder='Description(' + (i+1) + ') of product',
               name='description_' + i,
-              value=((product === undefined) ? '' : product.description[i]))
+              value=((product === undefined) ? '' : product.description_unescaped[i]))
         - }
     button.btn.btn-primary(type='submit') Submit
   if errors

@@ -10,5 +10,5 @@ block content
   p #[strong Stock:] #{product.stock}
   p #[strong Description:] 
     ul
-      each desc in product.description
+      each desc in product.description_unescaped
         li= desc
