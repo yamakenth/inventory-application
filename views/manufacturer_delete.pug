@@ -11,7 +11,7 @@ block content
       each product in manufacturer_products
         dt
           a(href=product.url) #{product.name}
-        dd #{product.stock}
+          |  (Stock: #{product.stock})
   else
     p Do you really want to delete this manufacturer?
     form(method='POST' action='')

@@ -104,12 +104,36 @@ exports.manufacturer_delete_get = function(req, res, next) {
         manufacturer_products: results.manufacturer_products
       });
     }
-  )
+  );
 }
 
 // handle manufacturer delete on POST
-exports.manufacturer_delete_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: manufacturer_delete_post');
+exports.manufacturer_delete_post = function(req, res, next) {
+  async.parallel(
+    {
+      manufacturer: function(callback) {
+        Manufacturer.findById(req.params.id).exec(callback);
+      },
+      manufacturer_products: function(callback) {
+        Product.find({ 'manufacturer': req.params.id }).exec(callback);
+      }
+    },
+    function(err, results) {
+      if (err) return next(err);
+      if (results.manufacturer_products.length > 0) {
+        res.render('manufacturer_delete', { 
+          title: 'Delete Manufacturer', 
+          manufacturer: results.manufacturer,
+          manufacturer_products: results.manufacturer_products
+        });
+      } else {
+        Manufacturer.findByIdAndRemove(req.body.manufacturerid, function deleteManufacturer(err) {
+          if (err) return next(err);
+          res.redirect('/catalog/manufacturers');
+        });
+      }
+    }
+  );
 }
 
 // display manufacturer update form on GET 
