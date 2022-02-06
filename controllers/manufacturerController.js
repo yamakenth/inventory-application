@@ -83,8 +83,28 @@ exports.manufacturer_create_post = [
 ];
 
 // display manufacturer delete form on GET 
-exports.manufacturer_delete_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: manufacturer_delete_get');
+exports.manufacturer_delete_get = function(req, res, next) {
+  async.parallel(
+    {
+      manufacturer: function(callback) {
+        Manufacturer.findById(req.params.id).exec(callback);
+      },
+      manufacturer_products: function(callback) {
+        Product.find({ 'manufacturer': req.params.id }).exec(callback);
+      }
+    },
+    function(err, results) {
+      if (err) return next(err);
+      if (results.manufacturer == null) {
+        res.redirect('/catalog/manufacturers');
+      }
+      res.render('manufacturer_delete', { 
+        title: 'Delete Manufacturer', 
+        manufacturer: results.manufacturer,
+        manufacturer_products: results.manufacturer_products
+      });
+    }
+  )
 }
 
 // handle manufacturer delete on POST
