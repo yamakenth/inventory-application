@@ -127,13 +127,21 @@ exports.product_create_post = [
 ];
 
 // display product delete form on GET 
-exports.product_delete_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: product_delete_get');
+exports.product_delete_get = function(req, res, next) {
+  Product.findById(req.params.id)
+    .sort({ name: 1 })
+    .exec(function(err, product) {
+      if (err) return next(err);
+      res.render('product_delete', { title: 'Delete Product', product: product });
+    });
 }
 
 // handle product delete on POST
-exports.product_delete_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: product_delete_post');
+exports.product_delete_post = function(req, res, next) {
+  Product.findByIdAndRemove(req.body.productid, function deleteProduct(err) {
+    if (err) return next(err);
+    res.redirect('/catalog/products');
+  });
 }
 
 // display product update form on GET 
