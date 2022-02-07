@@ -141,8 +141,16 @@ exports.category_delete_post = function(req, res, next) {
 }
 
 // display category update form on GET 
-exports.category_update_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: category_update_get');
+exports.category_update_get = function(req, res, next) {
+  Category.findById(req.params.id).exec(function(err, category) {
+    if (err) return next(err);
+    if (category == null) {
+      var err = new Error('Category not found');
+      err.status = 404;
+      return next(err);
+    }
+    res.render('category_form', { title: 'Update Category', category: category });
+  });
 }
 
 // handle category update on POST
