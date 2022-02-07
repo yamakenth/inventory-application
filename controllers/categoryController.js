@@ -154,6 +154,30 @@ exports.category_update_get = function(req, res, next) {
 }
 
 // handle category update on POST
-exports.category_update_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: category_update_post');
-}
+exports.category_update_post = [
+  body('name', 'Category name required').trim().isLength({ min: 1 }).escape(),
+  body('description', 'Description of category requried').trim().isLength({ min: 1 }).escape(),
+  
+  function(req, res, next) {
+    var errors = validationResult(req);
+
+    var category = new Category({
+      name: req.body.name,
+      description: req.body.description,
+      _id: req.params.id
+    });
+
+    if (!errors.isEmpty()) {
+      res.render('category_form', { 
+        title: 'Update Category',  
+        category: category,
+        errors: errors.array()
+      });
+    } else {
+      Category.findByIdAndUpdate(req.params.id, category, {}, function(err, thecategory) {
+        if (err) return next(err);
+        res.redirect(thecategory.url);
+      });
+    }
+  }  
+];
