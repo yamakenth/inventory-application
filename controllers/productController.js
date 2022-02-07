@@ -145,8 +145,37 @@ exports.product_delete_post = function(req, res, next) {
 }
 
 // display product update form on GET 
-exports.product_update_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: product_update_get');
+exports.product_update_get = function(req, res, next) {
+  async.parallel(
+    {
+      product: function(callback) {
+        Product.findById(req.params.id)
+          .populate('category')
+          .populate('manufacturer')
+          .exec(callback);
+      },
+      categories: function(callback) {
+        Category.find(callback);
+      },
+      manufacturers: function(callback) {
+        Manufacturer.find(callback);
+      }
+    },
+    function(err, results) {
+      if (err) return next(err);
+      if (results.product == null) {
+        var err = new Error('Product not found');
+        err.status = 404;
+        return next(err);
+      }
+      res.render('product_form', { 
+        title: 'Update Product', 
+        product: results.product,
+        categories: results.categories,
+        manufacturers: results.manufacturers
+      });
+    }
+  )
 }
 
 // handle product update on POST
