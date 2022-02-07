@@ -179,6 +179,59 @@ exports.product_update_get = function(req, res, next) {
 }
 
 // handle product update on POST
-exports.product_update_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: product_update_post');
-}
+exports.product_update_post = [
+  body('name', 'Product name required').trim().isLength({ min: 1 }).escape(),
+  body('manufacturer', 'Manufacturer is required').trim().isLength({ min: 1 }).escape(),
+  body('category', 'Category is required').trim().isLength({ min: 1 }).escape(),
+  body('price', 'Price is required').trim().isLength({ min: 1 }).escape(),
+  body('stock', 'Stock is required').trim().isLength({ min: 1 }).escape(),
+  body('description_0', 'At least one description is required').trim().isLength({ min: 1 }).escape(),
+
+  function(req, res, next) {
+    const errors = validationResult(req);
+    
+    var descriptionList = [];
+    for (var i = 0; i < 10; i++) {
+      var curDescription = req.body[`description_${i}`];
+      if (curDescription) descriptionList.push(curDescription);
+    }
+    var product = new Product({
+      name: req.body.name,
+      description: descriptionList,
+      manufacturer: req.body.manufacturer,
+      category: req.body.category,
+      price: req.body.price,
+      stock: req.body.stock,
+      _id: req.params.id
+    });
+    
+    if (!errors.isEmpty()) {
+      async.parallel(
+        {
+          categories: function(callback) {
+            Category.find(callback);
+          },
+          manufacturers: function(callback) {
+            Manufacturer.find(callback);
+          }
+        },
+        function(err, results) {
+          if (err) return next(err);
+          res.render('product_form', { 
+            title: 'Update Product', 
+            categories: results.categories,  
+            manufacturers: results.manufacturers,
+            product: product,
+            errors: errors.array()
+          });
+        }
+      );
+      return;
+    } else {
+      Product.findByIdAndUpdate(req.params.id, product, {}, function(err, theproduct) {
+        if (err) return next(err);
+        res.redirect(theproduct.url);
+      });
+    }
+  }
+];
