@@ -137,8 +137,16 @@ exports.manufacturer_delete_post = function(req, res, next) {
 }
 
 // display manufacturer update form on GET 
-exports.manufacturer_update_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: manufacturer_update_get');
+exports.manufacturer_update_get = function(req, res, next) {
+  Manufacturer.findById(req.params.id).exec(function(err, manufacturer) {
+    if (err) return next(err);
+    if (manufacturer == null) {
+      var err = new Error('Manufacturer not found');
+      err.status = 404;
+      return next(err);
+    }
+    res.render('manufacturer_form', { title: 'Update Manufacturer', manufacturer: manufacturer });
+  });
 }
 
 // handle manufacturer update on POST
