@@ -150,6 +150,28 @@ exports.manufacturer_update_get = function(req, res, next) {
 }
 
 // handle manufacturer update on POST
-exports.manufacturer_update_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: manufacturer_update_post');
-}
+exports.manufacturer_update_post = [
+  body('name', 'Manufacturer name required').trim().isLength({ min: 1 }).escape(),
+  
+  function(req, res, next) {
+    var errors = validationResult(req);
+
+    var manufacturer = new Manufacturer({ 
+      name: req.body.name,
+      _id: req.params.id
+    });
+
+    if (!errors.isEmpty()) {
+      res.render('manufacturer_form', { 
+        title: 'Update Manufacturer',  
+        manufacturer: manufacturer,
+        errors: errors.array()
+      });
+    } else {
+      Manufacturer.findByIdAndUpdate(req.params.id, manufacturer, {}, function(err, themanufacturer) {
+        if (err) return next(err);
+        res.redirect(themanufacturer.url);
+      });
+    }
+  }
+];
